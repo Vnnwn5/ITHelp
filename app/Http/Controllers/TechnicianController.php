@@ -114,18 +114,18 @@ class TechnicianController extends Controller
             $file = $request->file('avatar');
             $new_name = uniqid(rand(), true).'.'.strtolower($file->getClientOriginalExtension());
             $result = Storage::disk('public')->put('avatars/'. $new_name, File::get($file));
+
             if(!$result){
                 $request->session()->flash('file_error', 'Ha ocurrido un error al subir la imagen');
-                return redirect()->route('tecnicos.index')->withInput();
+                return redirect()->route('tecnicos.edit',[$technician])->withInput();
         }
-    }
-        //Uploading tech
-        if(!empty($result)){
+
             if(Storage::disk('public')->exists('avatars/'.$technician->avatar)){
-               Storage::disk('public')->delete('avatars/'.$technician->avatar);
+                Storage::disk('public')->delete('avatars/'.$technician->avatar);
             }
             $technician->avatar= $new_name;
-        }
+    }
+        //Uploading tech
         if (!empty($request->password)){
             $technician->password= Hash::make($request->password);
         }
@@ -144,8 +144,28 @@ class TechnicianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
+        if($request->ajax()){
+            $technician= User::find($id);
+
+            if(is_null($technician)){
+                return response()->json([
+                    'error'=>true,
+                    'message'=>'Ha ocurrido un error, intente de nuevo mas tarde .'
+                ]);
+            }
+
+            if(Storage::disk('public')->exists('avatars/'.$technician->avatar)){
+                Storage::disk('public')->delete('avatars/'.$technician->avatar);
+            }
+            $technician->delete();
+
+            return response()->json([
+                'error'=>false,
+                'message'=>'Tecnico eliminado correctamente. '
+            ], 200);
+        }
     }
+
 }
