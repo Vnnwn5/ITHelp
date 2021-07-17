@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\User;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\Technician\EditRequest;
 use App\Http\Requests\Technician\CreateRequest;
 
 class TechnicianController extends Controller
@@ -85,7 +87,13 @@ class TechnicianController extends Controller
      */
     public function edit($id)
     {
-        //
+        $technician = User::find($id);
+
+        if (is_null($technician)) {
+            return redirect()->route('tecnicos.index');
+        }
+
+        return view('Technicians.create_or_edit')->with('technician', $technician);
     }
 
     /**
@@ -95,9 +103,39 @@ class TechnicianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EditRequest $request, $id)
     {
-        //
+        $technician = User::find($id);
+        if(is_null($technician)) {
+            return redirect()->route('tecnicos.index');
+        }
+        //Uploading image
+        if ($request->has('avatar')){
+            $file = $request->file('avatar');
+            $new_name = uniqid(rand(), true).'.'.strtolower($file->getClientOriginalExtension());
+            $result = Storage::disk('public')->put('avatars/'. $new_name, File::get($file));
+            if(!$result){
+                $request->session()->flash('file_error', 'Ha ocurrido un error al subir la imagen');
+                return redirect()->route('tecnicos.index')->withInput();
+        }
+    }
+        //Uploading tech
+        if(!empty($result)){
+            if(Storage::disk('public')->exists('avatars/'.$technician->avatar)){
+               Storage::disk('public')->delete('avatars/'.$technician->avatar);
+            }
+            $technician->avatar= $new_name;
+        }
+        if (!empty($request->password)){
+            $technician->password= Hash::make($request->password);
+        }
+
+        $technician->fill($request->all()) ;
+        $technician->save() ;
+
+        $request->session()->flash('message','Tecnico ha sido actualizado correctamente');
+
+        return redirect()->route('tecnicos.index');
     }
 
     /**
