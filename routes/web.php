@@ -24,14 +24,18 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('/dispositivos', DeviceController::class);
-Route::resource('/clientes', CustomerController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('/dispositivos', DeviceController::class);
+    Route::resource('/clientes', CustomerController::class);
 
-Route::get('/mantenimientos', [App\Http\Controllers\MaintenanceController::class,'getIndex'])->name('mantenimientos.index');
-Route::get('/mantenimientos/create', [App\Http\Controllers\MaintenanceController::class,'getCreate'])->name('mantenimientos.create');
-Route::post('/mantenimientos/create', [App\Http\Controllers\MaintenanceController::class,'postStore'])->name('mantenimientos.store');
-Route::get('/mantenimientos/edit/{id}', [App\Http\Controllers\MaintenanceController::class,'getEdit'])->name('mantenimientos.edit');
-Route::put('/mantenimientos/update/{id}', [App\Http\Controllers\MaintenanceController::class,'putUpdate'])->name('mantenimientos.update');
-Route::delete('/mantenimientos/delete/{id}', [App\Http\Controllers\MaintenanceController::class,'deleteDestroy'])->name('mantenimientos.destroy');
+    Route::get('/mantenimientos', [App\Http\Controllers\MaintenanceController::class,'getIndex'])->name('mantenimientos.index');
+    Route::get('/mantenimientos/create', [App\Http\Controllers\MaintenanceController::class,'getCreate'])->name('mantenimientos.create');
+    Route::post('/mantenimientos/create', [App\Http\Controllers\MaintenanceController::class,'postStore'])->name('mantenimientos.store');
+    Route::get('/mantenimientos/edit/{id}', [App\Http\Controllers\MaintenanceController::class,'getEdit'])->name('mantenimientos.edit');
+    Route::put('/mantenimientos/update/{id}', [App\Http\Controllers\MaintenanceController::class,'putUpdate'])->name('mantenimientos.update');
+    Route::delete('/mantenimientos/delete/{id}', [App\Http\Controllers\MaintenanceController::class,'deleteDestroy'])->name('mantenimientos.destroy');
 
-Route::resource('/tecnicos', \App\Http\Controllers\TechnicianController::class);
+    Route::resource('/tecnicos', \App\Http\Controllers\TechnicianController::class);
+});
+
+
