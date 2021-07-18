@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Technician\EditRequest;
 use App\Http\Requests\Technician\CreateRequest;
@@ -46,16 +45,17 @@ class TechnicianController extends Controller
     public function store(CreateRequest $request)
     {
         $technician = new User();
-
+        if($request->has('avatar')){
             $file = $request->file('avatar');
-        if (!$this->upload($file, rand())){
-            $request->session()->flash('file_error', $this->error_message);
-            return redirect()->route('tecnicos.create')->withInput();
+
+            if (!$this->upload($file, rand())){
+                $request->session()->flash('file_error', $this->error_message);
+                return redirect()->route('tecnicos.create')->withInput();
+             }
+            $technician->avatar= $this->new_name;
         }
 
         $technician->type= 2 ;
-        $technician->avatar= $this->new_name;
-        $technician->password= Hash::make($request->password);
         $technician->fill($request->all()) ;
         $technician->save() ;
 
@@ -126,10 +126,6 @@ class TechnicianController extends Controller
             $technician->avatar= $new_name;
     }
         //Uploading tech
-        if (!empty($request->password)){
-            $technician->password= Hash::make($request->password);
-        }
-
         $technician->fill($request->all()) ;
         $technician->save() ;
 

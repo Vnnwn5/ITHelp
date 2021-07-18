@@ -68,6 +68,9 @@
                     </table>
                 </div>
                 <div class="tab-pane fade" id="v-pills-maintenance" role="tabpanel" aria-labelledby="v-pills-maintenance-tab">
+                    @if($device->maintenances->isEmpty()))
+                    <h4> No tiene mantenimientos asignados </h4>
+                    @else
                     <table class="table table-bordered">
                         <thead>
                         <tr>
@@ -86,6 +89,7 @@
                         @endforeach
                         </tbody>
                     </table>
+                    @endif
                 </div>
             </div>
         </div>
