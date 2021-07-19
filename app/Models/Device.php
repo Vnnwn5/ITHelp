@@ -10,24 +10,30 @@ class Device extends Model
 {
     use HasFactory;
 
+    const STATUSES = ['Recibido', 'Procesando', 'Terminado', 'Entregado'];
+
     protected $fillable =['customer_id','user_id','description','status','entry_date','departure_date'];
 
     public function customer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo('App\Models\Customer');
     }
+
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo('App\Models\User');
     }
+
     public function maintenances(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany('App\Models\Maintenance')->withTimestamps();;
     }
+
     public function getEntryDateAttribute($value)
     {
         return Carbon::parse($value)->format('d/m/Y');
     }
+
     public function getDepartureDateAttribute($value)
     {
         if(is_null($value)){
@@ -38,9 +44,14 @@ class Device extends Model
     }
 
 
+
     public static function devicesFilter($status, $entry_date_from, $entry_date_to)
     {
-        return Device::status($status)->entryDate($entry_date_from, $entry_date_to)->paginate(3);
+         if(auth()->user()->type !=1){
+             return Device::status($status)->entryDate($entry_date_from, $entry_date_to)
+                 ->where('user_id',auth()->user()->id)->paginate(9);
+         }
+        return Device::status($status)->entryDate($entry_date_from, $entry_date_to)->paginate(9);
             }
             /**
              * Scope a query to only include devices of a given status.

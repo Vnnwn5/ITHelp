@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Device;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -24,10 +25,13 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'customer_id' =>'required|exists:customers,id',
-            'user_id' =>'required|exists:users,id',
-            'maintenances' =>'required|exists:maintenances,id',
-            'description' =>'required|string',
+            'customer_id' => ['required', 'exists:customers,id'],
+            'user_id' => [
+                'exists:users,id',
+                Rule::requiredIf(request()->user()->type == 1)
+            ],
+            'maintenances' => ['required', 'exists:maintenances,id'],
+            'description' => ['required', 'string'],
 
         ];
     }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Device;
 
+use App\Models\Device;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class updateRequest extends FormRequest
 {
@@ -24,12 +26,15 @@ class updateRequest extends FormRequest
     public function rules()
     {
         return [
-                 'customer_id' =>'required|exists:customers,id',
-                 'user_id' =>'required|exists:users,id',
-                 'maintenances' =>'required|exists:maintenances,id',
-                 'description' =>'required|string',
-                 'status' =>'required|string|in:Recibido,Procesando,Terminado,Entregado',
+            'customer_id' =>'required|exists:customers,id',
+            'user_id' => [
+                'exists:users,id',
+                Rule::requiredIf(request()->user()->type == 1)
+            ],
+            'maintenances' =>'required|exists:maintenances,id',
+            'description' =>'required|string',
+            'status' =>'required|string|in:' . implode(',', Device::STATUSES),
 
-             ];
+        ];
     }
 }

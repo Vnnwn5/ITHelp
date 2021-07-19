@@ -27,7 +27,7 @@ class DeviceController extends Controller
     {
         $data = [
             'customer_id' => $request->customer_id,
-            'user_id' =>  $request->user_id,
+            'user_id' =>  (auth()->user()->type == 1) ? $request->user_id : auth()->user()->id,
             'description' => $request->description,
             'status' => 'Recibido',
             'entry_date' => Carbon::now(),

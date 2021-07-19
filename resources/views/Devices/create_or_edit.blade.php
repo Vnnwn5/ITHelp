@@ -26,18 +26,19 @@
             </span>
             @enderror
         </div>
-
     <div class="form-group">
+        @if(auth()->user()->type == 1)
         {!! Form::label('user_id', 'Técnico') !!}
         {!! Form::select('user_id', $technicians->get(), null, [
             'placeholder' => 'Seleccione un técnico',
             'class' => 'form-control '.(!empty($errors->first('user_id')) ? 'is-invalid' : '')])
         !!}
-        @error('user_id')
-        <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-        @enderror
+            @error('user_id')
+            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+            @enderror
+        @endif
     </div>
 
     <div class="form-group">
