@@ -31,8 +31,13 @@
         </table>
     </div>
 
-
     <a href="{{ url('/') }}" class="btn btn-secondary">
         <i class="fas fa-undo"></i> Ir al inicio
+    </a>
+    <a href="{{ route('profile.edit_personal_data') }}" class="btn btn-warning">
+        <i class="fas fa-edit"></i> Editar datos personales
+    </a>
+    <a href="{{ route('profile.edit_password') }}" class="btn btn-warning">
+        <i class="fas fa-lock"></i> Editar contrasenia
     </a>
 @endcomponent
