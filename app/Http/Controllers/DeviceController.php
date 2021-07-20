@@ -72,6 +72,8 @@ class DeviceController extends Controller
         if(is_null($device)){
             return redirect()->route('dispositivos.index');
         }
+        $this->authorize('update', $device);
+
         return view('Devices.create_or_edit')->with('device',$device);
     }
 
@@ -82,6 +84,8 @@ class DeviceController extends Controller
         if (is_null($device)) {
             return redirect()->route('dispositivos.index');
         }
+
+        $this->authorize('update', $device);
 
         $device->fill($request->all());
 

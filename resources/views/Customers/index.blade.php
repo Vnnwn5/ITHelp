@@ -26,8 +26,10 @@
                     <td>
                         <a href="{{ route('clientes.show', [$customer]) }}" class="btn btn-outline-primary"><i class="fas fa-info-circle"></i> Ver más</a>
                         <a href="{{ route('clientes.edit', [$customer]) }}" class="btn btn-outline-dark"><i class="fas fa-edit"></i> Editar</a>
+                        @can('check-admin')
                         <a href="{{ route('clientes.destroy', [$customer]) }}" class="btn btn-outline-danger" @click="getElementData" data-id={{ $customer->id }} data-toggle="modal" data-target="#deleteModal">
                             <i class="fas fa-trash"></i> Eliminar</a>
+                        @endcan
                     </td>
                 </tr>
             @empty
