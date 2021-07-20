@@ -8,6 +8,11 @@ use App\Http\Requests\Maintenance\EditRequest;
 use App\Http\Requests\Maintenance\CreateRequest;
 class MaintenanceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin')->except('getIndex');
+    }
+
     public function getIndex(Request $request)
     {
 

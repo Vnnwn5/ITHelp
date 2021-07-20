@@ -29,7 +29,7 @@ class updateRequest extends FormRequest
             'customer_id' =>'required|exists:customers,id',
             'user_id' => [
                 'exists:users,id',
-                Rule::requiredIf(request()->user()->type == 1)
+                Rule::requiredIf(request()->user()->isAdmin())
             ],
             'maintenances' =>'required|exists:maintenances,id',
             'description' =>'required|string',
