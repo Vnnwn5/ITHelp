@@ -16,13 +16,9 @@ use App\Http\Controllers\MaintenanceController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('/dispositivos', DeviceController::class);
@@ -36,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/mantenimientos/delete/{id}', [App\Http\Controllers\MaintenanceController::class,'deleteDestroy'])->name('mantenimientos.destroy');
 
     Route::resource('/tecnicos', \App\Http\Controllers\TechnicianController::class)->middleware('admin');
+
+    Route::get('/perfil', [App\Http\Controllers\ProfileController::class,'index'])->name('Profile.index');
 });
 
 
