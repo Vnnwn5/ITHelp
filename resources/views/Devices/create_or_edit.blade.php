@@ -27,7 +27,7 @@
             @enderror
         </div>
     <div class="form-group">
-        @if(auth()->user()->type == 1)
+        @if(auth()->user()->isAdmin())
         {!! Form::label('user_id', 'Técnico') !!}
         {!! Form::select('user_id', $technicians->get(), null, [
             'placeholder' => 'Seleccione un técnico',

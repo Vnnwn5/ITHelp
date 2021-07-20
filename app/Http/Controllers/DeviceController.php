@@ -12,6 +12,11 @@ use App\Http\Requests\Device\updateRequest;
 
 class DeviceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin')->only('destroy');
+    }
+
     public function index(Request $request)
     {
         $devices = Device::devicesFilter($request->status,$request->entry_date_from,$request->entry_date_to);
@@ -27,7 +32,7 @@ class DeviceController extends Controller
     {
         $data = [
             'customer_id' => $request->customer_id,
-            'user_id' =>  (auth()->user()->type == 1) ? $request->user_id : auth()->user()->id,
+            'user_id' =>  (auth()->user()->isAdmin()) ? $request->user_id : auth()->user()->id,
             'description' => $request->description,
             'status' => 'Recibido',
             'entry_date' => Carbon::now(),
