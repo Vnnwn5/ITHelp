@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Technician\EditRequest;
@@ -125,8 +126,16 @@ class TechnicianController extends Controller
             }
             $technician->avatar= $new_name;
     }
+
+
+        //verify password field
+        $data = $request->all();
+        if ($request->password == null) {
+            $data = Arr::except($data, 'password');
+        }
+
         //Uploading tech
-        $technician->fill($request->all()) ;
+        $technician->fill($data) ;
         $technician->save() ;
 
         $request->session()->flash('message','Tecnico ha sido actualizado correctamente');

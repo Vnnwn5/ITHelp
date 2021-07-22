@@ -16,11 +16,11 @@ use App\Http\Controllers\MaintenanceController;
 |
 */
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/dispositivos', DeviceController::class);
     Route::resource('/clientes', CustomerController::class);
 
@@ -34,8 +34,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/tecnicos', \App\Http\Controllers\TechnicianController::class)->middleware('admin');
 
     Route::get('/perfil', [App\Http\Controllers\ProfileController::class,'index'])->name('profile.index');
-    Route::get('/perfil/editar-datos', [App\Http\Controllers\ProfileController::class,'editPersonalData'])->name('profile.edit_personal_data');
-    Route::get('/perfil/editar-contrasena', [App\Http\Controllers\ProfileController::class,'editPassword'])->name('profile.edit_password');
+    Route::get('/perfil/editar-datos', [App\Http\Controllers\ProfileController::class,'editPersonalData'])->name('profile.edit_personal_data')->middleware('password.confirm');
+    Route::get('/perfil/editar-contrasena', [App\Http\Controllers\ProfileController::class,'editPassword'])->name('profile.edit_password')->middleware('password.confirm');
     Route::put('/perfil/actualizar-datos', [App\Http\Controllers\ProfileController::class,'updatePersonalData'])->name('profile.update_personal_data');
     Route::put('/perfil/actualizar-contrasena', [App\Http\Controllers\ProfileController::class,'updatePassword'])->name('profile.update_password');
 });
