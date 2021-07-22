@@ -61,10 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
                        ->orWhere('email', 'LIKE', "%$tech_data%");
         }
     }
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
+
     public function isAdmin()
     {
         return $this->type == 1;

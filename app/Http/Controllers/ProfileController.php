@@ -7,6 +7,7 @@ use App\Http\Requests\Profile\EditPassword;
 use Illuminate\Http\Request;
 use App\Http\Requests\Profile\EditPersonalData;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -41,7 +42,7 @@ class ProfileController extends Controller
         }
         //Uploading user data
         auth()->user()->fill($request->all()) ;
-        auth()->user()->save() ;
+        auth()->user()->save();
 
         $request->session()->flash('message','Datos actualizados correctamente');
 
@@ -56,8 +57,8 @@ class ProfileController extends Controller
     public function updatePassword (EditPassword $request)
     {
         //Uploading password
-        auth()->user()->fill($request->all()) ;
-        auth()->user()->save() ;
+        auth()->user()->password = Hash::make($request->password);
+        auth()->user()->save();
 
         $request->session()->flash('message','Contrasenia actualizada correctamente');
 
