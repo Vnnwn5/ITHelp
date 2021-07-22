@@ -3,18 +3,18 @@
         Editando mi contrasenia
     @endslot
 
-    {!! Form::model(auth()->user(), ['route' => 'profile.update', 'method' => 'put', 'files'=> true]) !!}
+    {!! Form::model(auth()->user(), ['route' => 'profile.update_password', 'method' => 'put', 'files'=> true]) !!}
 
     <div class="form-group">
-        {!! Form::label('old_password', 'Contrasenia actual') !!}
-        {!! Form::password('password', [
+        {!! Form::label('current_password', 'Contrasenia actual') !!}
+        {!! Form::password('current_password', [
             'placeholder' => 'Ingresa la contrasenia actual',
-            'class' => 'form-control '.(!empty($errors->first('old_password')) ? 'is-invalid' : '')]);
+            'class' => 'form-control '.(!empty($errors->first('current_password')) ? 'is-invalid' : '')]);
         !!}
-        @error('old_password')
+        @error('current_password')
         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
-            </span>
+        </span>
         @enderror
     </div>
     <div class="form-group">
@@ -38,7 +38,7 @@
         @error('password_confirmation')
         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
-            </span>
+        </span>
         @enderror
     </div>
 

@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/perfil/editar-datos', [App\Http\Controllers\ProfileController::class,'editPersonalData'])->name('profile.edit_personal_data');
     Route::get('/perfil/editar-contrasena', [App\Http\Controllers\ProfileController::class,'editPassword'])->name('profile.edit_password');
     Route::put('/perfil/actualizar-datos', [App\Http\Controllers\ProfileController::class,'updatePersonalData'])->name('profile.update_personal_data');
+    Route::put('/perfil/actualizar-contrasena', [App\Http\Controllers\ProfileController::class,'updatePassword'])->name('profile.update_password');
 });
 
 
